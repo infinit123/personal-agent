@@ -53,46 +53,6 @@ function formatDateFormatted(isoDateString) {
   });
 }
 
-// Global Numeric Motion Engine (Interpolare Smooth pentru Suma Afișată)
-const numericAnimState = new WeakMap();
-
-function animateNumber(element, targetValue, isCurrency = true) {
-  if (!element) return;
-  
-  const startValue = numericAnimState.has(element) 
-    ? numericAnimState.get(element) 
-    : 0;
-
-  numericAnimState.set(element, targetValue);
-
-  if (Math.abs(startValue - targetValue) < 0.01) {
-    element.innerText = isCurrency ? formatCurrency(targetValue) : targetValue.toFixed(2);
-    return;
-  }
-
-  const duration = 400; // ms
-  const startTime = performance.now();
-
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    
-    // Cubic decelerate easing
-    const easeProgress = 1 - Math.pow(1 - progress, 3);
-    const currentValue = startValue + (targetValue - startValue) * easeProgress;
-
-    element.innerText = isCurrency ? formatCurrency(currentValue) : currentValue.toFixed(2);
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    } else {
-      element.innerText = isCurrency ? formatCurrency(targetValue) : targetValue.toFixed(2);
-    }
-  }
-
-  requestAnimationFrame(update);
-}
-
 // 2. Stare Aplicație & Date
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 let savingsGoal = JSON.parse(localStorage.getItem('savingsGoal')) || { title: 'Vacanță', target: 2000, current: 0 };
@@ -372,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace('RON', 'LEI');
   }
 
-  // --- ACTUALIZARE UI PRINCIPALĂ CU ANIMAȚII NUMERICE ---
+  // --- ACTUALIZARE UI PRINCIPALĂ ---
   function updateUI() {
     const monthlyData = getMonthlyTransactions();
 
@@ -386,13 +346,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const balance = income - expenses;
 
-    // Animație lină pe numere
-    animateNumber(balanceEl, balance);
-    animateNumber(totalIncomeEl, income);
-    animateNumber(totalExpensesEl, expenses);
+    if (balanceEl) balanceEl.innerText = formatCurrency(balance);
+    if (totalIncomeEl) totalIncomeEl.innerText = formatCurrency(income);
+    if (totalExpensesEl) totalExpensesEl.innerText = formatCurrency(expenses);
 
-    animateNumber(calMonthIncomeEl, income);
-    animateNumber(calMonthExpensesEl, expenses);
+    if (calMonthIncomeEl) calMonthIncomeEl.innerText = formatCurrency(income);
+    if (calMonthExpensesEl) calMonthExpensesEl.innerText = formatCurrency(expenses);
 
     if (balanceCardEl && balanceStatusEl) {
       if (balance < 0) {
@@ -430,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
       row.className = 'category-row';
       row.innerHTML = `
         <span class="cat-name">${cat}</span>
-        <span class="cat-val numeric-accent">${formatCurrency(categoryTotals[cat])}</span>
+        <span class="cat-val">${formatCurrency(categoryTotals[cat])}</span>
       `;
       categoryBreakdownEl.appendChild(row);
     });
@@ -561,12 +520,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const expenses = dayTxs.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
     const net = income - expenses;
 
-    animateNumber(dayTotalIncomeEl, income);
-    animateNumber(dayTotalExpensesEl, expenses);
-    animateNumber(dayTotalNetEl, net);
-
+    if (dayTotalIncomeEl) dayTotalIncomeEl.innerText = formatCurrency(income);
+    if (dayTotalExpensesEl) dayTotalExpensesEl.innerText = formatCurrency(expenses);
     if (dayTotalNetEl) {
-      dayTotalNetEl.className = 'day-sum-val numeric-accent ' + (net >= 0 ? 'color-income' : 'color-expense');
+      dayTotalNetEl.innerText = formatCurrency(net);
+      dayTotalNetEl.className = 'day-sum-val ' + (net >= 0 ? 'color-income' : 'color-expense');
     }
 
     dayTransactionsListEl.innerHTML = '';
@@ -600,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="item-date">${displayDate}</span>
       </div>
       <div class="item-right">
-        <span class="item-amount numeric-accent ${amountClass}">${sign}${formatCurrency(t.amount)}</span>
+        <span class="item-amount ${amountClass}">${sign}${formatCurrency(t.amount)}</span>
         <button class="btn-delete-item" data-id="${t.id}" title="Șterge">&times;</button>
       </div>
     `;
