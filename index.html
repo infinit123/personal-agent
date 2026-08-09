@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html lang="ro" data-theme="dark">
+<html lang="ro" data-theme="auto">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Finance — Financial Hub</title>
+  <title>Finance</title>
 
+  <!-- Denumire aplicație salvată pe ecranul iOS -->
   <meta name="apple-mobile-web-app-title" content="Finance">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Iconițe iOS & Favicon -->
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Modal Actualizare -->
+  <!-- Modal Pop-Up Actualizare iOS -->
   <div id="update-modal" class="modal-overlay" style="display: none;">
-    <div class="glass-modal-content">
+    <div class="modal-content">
       <div class="modal-header">
         <h3>Actualizare Disponibilă</h3>
-        <p>O nouă versiune a aplicației este pregătită.</p>
+        <p>O nouă versiune a aplicației este gata de instalare.</p>
       </div>
       <div class="modal-actions">
         <button id="btn-update-app" class="ios-btn-primary">Actualizează Acum</button>
@@ -29,283 +33,268 @@
     </div>
   </div>
 
-  <div class="app-layout">
+  <div class="app-container">
     
-    <!-- SIDEBAR STÂNGA (Bara de Navigare) -->
-    <aside class="app-sidebar">
-      <div class="sidebar-header">
-        <div class="brand">
-          <div class="brand-logo">F</div>
-          <span class="brand-name">Finance</span>
-        </div>
+    <!-- Header Clasic Finance -->
+    <header class="ios-header">
+      <div class="header-top">
+        <span class="date-badge" id="current-date">FINANCE</span>
+        <button class="btn-clear" id="btn-reset" title="Resetează Datele">Resetează</button>
       </div>
+      <h1>Finanțele Mele</h1>
+    </header>
 
-      <nav class="sidebar-nav">
-        <button class="nav-btn active" data-target="sec-dashboard">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-          <span>General</span>
-        </button>
-        <button class="nav-btn" data-target="sec-goals">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-          <span>Obiectiv</span>
-        </button>
-        <button class="nav-btn" data-target="sec-calendar">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          <span>Calendar</span>
-        </button>
-        <button class="nav-btn" data-target="sec-add">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-          <span>Adaugă</span>
-        </button>
-        <button class="nav-btn" data-target="sec-history">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-          <span>Istoric</span>
-        </button>
-        <button class="nav-btn" data-target="sec-settings">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          <span>Setări</span>
-        </button>
-      </nav>
-
-      <div class="sidebar-footer">
-        <button class="btn-clear" id="btn-reset" title="Resetează Datele">Resetează datele</button>
-      </div>
-    </aside>
-
-    <!-- ZONA PRINCIPALĂ DE CONȚINUT -->
-    <main class="app-main">
+    <!-- SECȚIUNEA 1: DASHBOARD / GENERAL -->
+    <section id="sec-dashboard" class="tab-content active">
       
-      <header class="main-header">
-        <div class="header-info">
-          <span class="date-badge" id="current-date">Azi</span>
-          <h1 class="page-title">Panou Financiar</h1>
+      <!-- Selector Lunar Clasic -->
+      <div class="ios-card month-selector-card">
+        <div class="month-selector">
+          <button type="button" class="month-nav-btn btn-prev-month-action" aria-label="Luna precedentă">&#x2039;</button>
+          <span class="month-display current-month-display-text">--- ----</span>
+          <button type="button" class="month-nav-btn btn-next-month-action" aria-label="Luna următoare">&#x203A;</button>
         </div>
-      </header>
+      </div>
 
-      <!-- SECȚIUNEA 1: DASHBOARD / GENERAL -->
-      <section id="sec-dashboard" class="tab-content active">
+      <!-- HERO FINANCIAL CARD -->
+      <div class="ios-card balance-card" id="balance-card">
+        <span class="card-subtitle">BALANȚĂ DISPONIBILĂ</span>
+        <div class="balance-value" id="balance">0,00 LEI</div>
+        <div class="balance-status-badge" id="balance-status-container">
+          <span class="status-indicator"></span>
+          <span id="balance-status">Buget stabil</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="ios-card metric-card">
+          <span class="metric-label">VENITURI</span>
+          <div class="metric-value color-income" id="total-income">0,00 LEI</div>
+        </div>
+        <div class="ios-card metric-card">
+          <span class="metric-label">CHELTUIELI</span>
+          <div class="metric-value color-expense" id="total-expenses">0,00 LEI</div>
+        </div>
+      </div>
+
+      <div class="ios-card">
+        <h3 class="card-title">Categorii Cheltuieli</h3>
+        <div class="category-breakdown" id="category-breakdown">
+          <p class="empty-text">Nu există date suficiente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECȚIUNEA 2: OBIECTIV ECONOMISIRE -->
+    <section id="sec-goals" class="tab-content">
+      <div class="ios-card">
+        <div class="card-header-flex">
+          <h2 class="card-title">Obiectiv Economisire</h2>
+          <button id="btn-edit-goal" class="btn-clear">Editează</button>
+        </div>
         
-        <div class="ios-card month-selector-card">
-          <div class="month-selector">
-            <button type="button" class="month-nav-btn btn-prev-month-action" aria-label="Luna precedentă">&#x2039;</button>
-            <span class="month-display current-month-display-text">--- ----</span>
-            <button type="button" class="month-nav-btn btn-next-month-action" aria-label="Luna următoare">&#x203A;</button>
-          </div>
-        </div>
-
-        <div class="ios-card balance-card hero-card" id="balance-card">
-          <div class="hero-card-header">
-            <span class="card-subtitle">BALANȚĂ DISPONIBILĂ</span>
-            <div class="balance-status-badge" id="balance-status-container">
-              <span class="status-indicator"></span>
-              <span id="balance-status">Buget stabil</span>
-            </div>
-          </div>
-          <div class="balance-value" id="balance">0,00 LEI</div>
-        </div>
-
-        <div class="metrics-grid">
-          <div class="ios-card metric-card">
-            <span class="metric-label">TOTAL VENITURI</span>
-            <div class="metric-value color-income" id="total-income">0,00 LEI</div>
-          </div>
-          <div class="ios-card metric-card">
-            <span class="metric-label">TOTAL CHELTUIELI</span>
-            <div class="metric-value color-expense" id="total-expenses">0,00 LEI</div>
-          </div>
-        </div>
-
-        <div class="ios-card">
-          <h3 class="card-title">Distribuție pe Categorii</h3>
-          <div class="category-breakdown" id="category-breakdown">
-            <p class="empty-text">Nu există date suficiente.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECȚIUNEA 2: OBIECTIV ECONOMISIRE -->
-      <section id="sec-goals" class="tab-content">
-        <div class="ios-card">
-          <div class="card-header-flex">
-            <h2 class="card-title">Obiectiv de Economisire</h2>
-            <button id="btn-edit-goal" class="btn-text">Editează</button>
+        <div id="goal-display">
+          <div class="goal-info-header">
+            <span id="goal-title-text" class="goal-title">Vacanță</span>
+            <span id="goal-progress-text" class="goal-progress-num">0 / 0 LEI</span>
           </div>
           
-          <div id="goal-display">
-            <div class="goal-info-header">
-              <span id="goal-title-text" class="goal-title">Vacanță</span>
-              <span id="goal-progress-text" class="goal-progress-num">0 / 0 LEI</span>
-            </div>
-            
-            <div class="goal-progress-bar">
-              <div id="goal-progress-fill" class="goal-progress-fill"></div>
-            </div>
-
-            <div class="form-item goal-actions-container">
-              <label>MODIFICĂ FONDUL</label>
-              <input type="number" id="goal-add-amount" class="input-premium" placeholder="Suma (ex: 100)">
-              <div class="button-group">
-                <button id="btn-add-to-goal" class="ios-btn-primary">+ Depune</button>
-                <button id="btn-sub-from-goal" class="ios-btn-secondary">- Extrage</button>
-              </div>
-            </div>
+          <div class="goal-progress-bar">
+            <div id="goal-progress-fill" class="goal-progress-fill"></div>
           </div>
 
-          <form id="goal-form" style="display: none;" class="premium-form">
-            <div class="form-item">
-              <label>TITLU OBIECTIV</label>
-              <input type="text" id="goal-name-input" class="input-premium" placeholder="ex: Fond urgență" required>
-            </div>
-            <div class="form-item">
-              <label>SUMĂ ȚINTĂ (LEI)</label>
-              <input type="number" id="goal-target-input" class="input-premium" placeholder="ex: 3000" min="1" required>
-            </div>
+          <div class="form-item goal-actions-container">
+            <label>MODIFICĂ SUMA ALOCATĂ</label>
+            <input type="number" id="goal-add-amount" class="input-classic" placeholder="Suma (ex: 100)">
             <div class="button-group">
-              <button type="submit" class="ios-btn-primary">Salvează</button>
-              <button type="button" id="btn-cancel-goal" class="ios-btn-secondary">Anulează</button>
+              <button id="btn-add-to-goal" class="ios-btn-primary">+ Adaugă</button>
+              <button id="btn-sub-from-goal" class="ios-btn-secondary">- Extrage</button>
             </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- SECȚIUNEA 3: CALENDAR FINANCIAR -->
-      <section id="sec-calendar" class="tab-content">
-        <div class="ios-card month-selector-card">
-          <div class="month-selector">
-            <button type="button" class="month-nav-btn btn-prev-month-action" aria-label="Luna precedentă">&#x2039;</button>
-            <span class="month-display current-month-display-text">--- ----</span>
-            <button type="button" class="month-nav-btn btn-next-month-action" aria-label="Luna următoare">&#x203A;</button>
           </div>
         </div>
 
-        <div class="metrics-grid">
-          <div class="ios-card metric-card">
-            <span class="metric-label">VENITURI LUNĂ</span>
-            <div class="metric-value color-income" id="cal-month-income">0,00 LEI</div>
-          </div>
-          <div class="ios-card metric-card">
-            <span class="metric-label">CHELTUIELI LUNĂ</span>
-            <div class="metric-value color-expense" id="cal-month-expenses">0,00 LEI</div>
-          </div>
-        </div>
-
-        <div class="ios-card calendar-card">
-          <div class="calendar-weekdays">
-            <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
-          </div>
-          <div class="calendar-days-grid" id="calendar-days-grid"></div>
-        </div>
-
-        <div class="ios-card" id="day-details-card">
-          <div class="card-header-flex">
-            <h3 class="card-title" id="selected-day-title">DETALII ZI</h3>
-            <button type="button" id="btn-add-tx-for-day" class="btn-text">+ Adaugă Tranzacție</button>
-          </div>
-          
-          <div class="day-summary-row" id="day-summary-row">
-            <div class="day-summary-item">
-              <span class="day-sum-label">VENITURI</span>
-              <span class="day-sum-val color-income" id="day-total-income">+0,00 LEI</span>
-            </div>
-            <div class="day-summary-item">
-              <span class="day-sum-label">CHELTUIELI</span>
-              <span class="day-sum-val color-expense" id="day-total-expenses">-0,00 LEI</span>
-            </div>
-            <div class="day-summary-item">
-              <span class="day-sum-label">SOLD ZI</span>
-              <span class="day-sum-val" id="day-total-net">0,00 LEI</span>
-            </div>
-          </div>
-
-          <ul class="ios-list" id="day-transactions-list"></ul>
-        </div>
-      </section>
-
-      <!-- SECȚIUNEA 4: ADAUGĂ TRANZACȚIE -->
-      <section id="sec-add" class="tab-content">
-        <div class="ios-card">
-          <h3 class="card-title">Înregistrare Tranzacție</h3>
-          
-          <div class="type-picker">
-            <button type="button" class="picker-btn active" id="pick-expense">Cheltuială</button>
-            <button type="button" class="picker-btn" id="pick-income">Venit</button>
-          </div>
-
-          <form id="transaction-form" class="premium-form">
-            <input type="hidden" id="tx-type" value="expense">
-
-            <div class="form-item">
-              <label for="tx-description">DESCRIERE / MERCHANT</label>
-              <input type="text" id="tx-description" class="input-premium" placeholder="ex: Cumpărături, Chirie, Salariu" required autocomplete="off">
-            </div>
-
-            <div class="form-row">
-              <div class="form-item">
-                <label for="tx-amount">SUMĂ (LEI)</label>
-                <input type="number" id="tx-amount" class="input-premium" step="0.01" placeholder="0.00" required>
-              </div>
-
-              <div class="form-item">
-                <label for="tx-category">CATEGORIE</label>
-                <select id="tx-category" class="input-premium">
-                  <option value="Locuință & Utilități">Locuință & Utilități</option>
-                  <option value="Mâncare & Cumpărături">Mâncare & Cumpărături</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Abonamente & Servicii">Abonamente & Servicii</option>
-                  <option value="Timp Liber & Ieșiri">Timp Liber & Ieșiri</option>
-                  <option value="Venituri & Salariu">Venituri & Salariu</option>
-                  <option value="Economii & Investiții">Economii & Investiții</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-item">
-              <label for="tx-date">DATA TRANZACȚIEI</label>
-              <input type="date" id="tx-date" class="input-premium" required>
-            </div>
-
-            <button type="submit" class="ios-btn-primary">Salvează Tranzacția</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- SECȚIUNEA 5: ISTORIC -->
-      <section id="sec-history" class="tab-content">
-        <div class="ios-card">
-          <div class="card-header-flex">
-            <h3 class="card-title">Istoric Tranzacții</h3>
-            <select id="filter-category" class="small-select input-premium">
-              <option value="all">Toate Categoriile</option>
-              <option value="Locuință & Utilități">Locuință & Utilități</option>
-              <option value="Mâncare & Cumpărături">Mâncare & Cumpărături</option>
-              <option value="Transport">Transport</option>
-              <option value="Abonamente & Servicii">Abonamente & Servicii</option>
-              <option value="Timp Liber & Ieșiri">Timp Liber & Ieșiri</option>
-              <option value="Venituri & Salariu">Venituri & Salariu</option>
-              <option value="Economii & Investiții">Economii & Investiții</option>
-            </select>
-          </div>
-          <ul class="ios-list" id="transaction-list"></ul>
-        </div>
-      </section>
-
-      <!-- SECȚIUNEA 6: SETĂRI -->
-      <section id="sec-settings" class="tab-content">
-        <div class="ios-card">
-          <h3 class="card-title">Aspect Vizual</h3>
+        <form id="goal-form" style="display: none;" class="classic-form">
           <div class="form-item">
-            <label>TEMA INTERFEȚEI</label>
-            <div class="theme-picker">
-              <button type="button" class="theme-btn" data-theme-val="light">Light</button>
-              <button type="button" class="theme-btn" data-theme-val="dark">Dark</button>
-              <button type="button" class="theme-btn" data-theme-val="auto">Auto</button>
-            </div>
+            <label>TITLU OBIECTIV</label>
+            <input type="text" id="goal-name-input" class="input-classic" placeholder="ex: Fond urgență, Vacanță..." required>
+          </div>
+          <div class="form-item">
+            <label>SUMĂ ȚINTĂ (LEI)</label>
+            <input type="number" id="goal-target-input" class="input-classic" placeholder="ex: 3000" min="1" required>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="ios-btn-primary">Salvează</button>
+            <button type="button" id="btn-cancel-goal" class="picker-btn">Anulează</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- SECȚIUNEA 3: FINANCIAL CALENDAR (INTACT & FUNCȚIONAL) -->
+    <section id="sec-calendar" class="tab-content">
+      <div class="ios-card month-selector-card">
+        <div class="month-selector">
+          <button type="button" class="month-nav-btn btn-prev-month-action" aria-label="Luna precedentă">&#x2039;</button>
+          <span class="month-display current-month-display-text">--- ----</span>
+          <button type="button" class="month-nav-btn btn-next-month-action" aria-label="Luna următoare">&#x203A;</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="ios-card metric-card">
+          <span class="metric-label">VENITURI LUNĂ</span>
+          <div class="metric-value color-income" id="cal-month-income">0,00 LEI</div>
+        </div>
+        <div class="ios-card metric-card">
+          <span class="metric-label">CHELTUIELI LUNĂ</span>
+          <div class="metric-value color-expense" id="cal-month-expenses">0,00 LEI</div>
+        </div>
+      </div>
+
+      <div class="ios-card calendar-card">
+        <div class="calendar-weekdays">
+          <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+        </div>
+        <div class="calendar-days-grid" id="calendar-days-grid"></div>
+      </div>
+
+      <div class="ios-card" id="day-details-card">
+        <div class="card-header-flex">
+          <h3 class="card-title" id="selected-day-title">DETALII ZI</h3>
+          <button type="button" id="btn-add-tx-for-day" class="btn-clear text-accent">+ Adaugă Tranzacție</button>
+        </div>
+        
+        <div class="day-summary-row" id="day-summary-row">
+          <div class="day-summary-item">
+            <span class="day-sum-label">VENITURI</span>
+            <span class="day-sum-val color-income" id="day-total-income">+0,00 LEI</span>
+          </div>
+          <div class="day-summary-item">
+            <span class="day-sum-label">CHELTUIELI</span>
+            <span class="day-sum-val color-expense" id="day-total-expenses">-0,00 LEI</span>
+          </div>
+          <div class="day-summary-item">
+            <span class="day-sum-label">NET ZI</span>
+            <span class="day-sum-val" id="day-total-net">0,00 LEI</span>
           </div>
         </div>
-      </section>
 
-    </main>
+        <ul class="ios-list" id="day-transactions-list"></ul>
+      </div>
+    </section>
+
+    <!-- SECȚIUNEA 4: ADAUGĂ TRANZACȚIE -->
+    <section id="sec-add" class="tab-content">
+      <div class="ios-card">
+        <h3 class="card-title">Adaugă Tranzacție</h3>
+        
+        <div class="type-picker">
+          <button type="button" class="picker-btn active" id="pick-expense">Cheltuială</button>
+          <button type="button" class="picker-btn" id="pick-income">Venit</button>
+        </div>
+
+        <form id="transaction-form" class="classic-form">
+          <input type="hidden" id="tx-type" value="expense">
+
+          <div class="form-item">
+            <label for="tx-description">DESCRIERE / COMERCIANT</label>
+            <input type="text" id="tx-description" class="input-classic" placeholder="ex: Cumpărături, Chirie, Salariu" required autocomplete="off">
+          </div>
+
+          <div class="form-row">
+            <div class="form-item">
+              <label for="tx-amount">SUMĂ (LEI)</label>
+              <input type="number" id="tx-amount" class="input-classic" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="form-item">
+              <label for="tx-category">CATEGORIE</label>
+              <select id="tx-category" class="input-classic">
+                <option value="Locuință & Utilități">Locuință & Utilități</option>
+                <option value="Mâncare & Cumpărături">Mâncare & Cumpărături</option>
+                <option value="Transport">Transport</option>
+                <option value="Abonamente & Servicii">Abonamente & Servicii</option>
+                <option value="Timp Liber & Ieșiri">Timp Liber & Ieșiri</option>
+                <option value="Venituri & Salariu">Venituri & Salariu</option>
+                <option value="Economii & Investiții">Economii & Investiții</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label for="tx-date">DATA TRANZACȚIEI</label>
+            <input type="date" id="tx-date" class="input-classic" required>
+          </div>
+
+          <button type="submit" class="ios-btn-primary">Salvează Tranzacția</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SECȚIUNEA 5: ISTORIC -->
+    <section id="sec-history" class="tab-content">
+      <div class="ios-card">
+        <div class="card-header-flex">
+          <h3 class="card-title">Istoric Tranzacții</h3>
+          <select id="filter-category" class="small-select input-classic">
+            <option value="all">Toate Categoriile</option>
+            <option value="Locuință & Utilități">Locuință & Utilități</option>
+            <option value="Mâncare & Cumpărături">Mâncare & Cumpărături</option>
+            <option value="Transport">Transport</option>
+            <option value="Abonamente & Servicii">Abonamente & Servicii</option>
+            <option value="Timp Liber & Ieșiri">Timp Liber & Ieșiri</option>
+            <option value="Venituri & Salariu">Venituri & Salariu</option>
+            <option value="Economii & Investiții">Economii & Investiții</option>
+          </select>
+        </div>
+        <ul class="ios-list" id="transaction-list"></ul>
+      </div>
+    </section>
+
+    <!-- SECȚIUNEA 6: SETĂRI -->
+    <section id="sec-settings" class="tab-content">
+      <div class="ios-card">
+        <h3 class="card-title">Setări Aspect</h3>
+        <div class="form-item">
+          <label>TEMA INTERFEȚEI</label>
+          <div class="theme-picker">
+            <button type="button" class="theme-btn" data-theme-val="light">Light</button>
+            <button type="button" class="theme-btn" data-theme-val="dark">Dark</button>
+            <button type="button" class="theme-btn" data-theme-val="auto">Auto</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
+
+  <!-- Bottom Navigation iOS Style -->
+  <nav class="ios-bottom-nav">
+    <button class="nav-btn active" data-target="sec-dashboard">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>General</span>
+    </button>
+    <button class="nav-btn" data-target="sec-goals">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+      <span>Obiectiv</span>
+    </button>
+    <button class="nav-btn" data-target="sec-calendar">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span>Calendar</span>
+    </button>
+    <button class="nav-btn" data-target="sec-add">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      <span>Adaugă</span>
+    </button>
+    <button class="nav-btn" data-target="sec-history">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+      <span>Istoric</span>
+    </button>
+    <button class="nav-btn" data-target="sec-settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span>Setări</span>
+    </button>
+  </nav>
 
   <script src="app.js"></script>
 </body>
