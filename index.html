@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Revizio PWA - Gaze Naturale</title>
+    <meta name="description" content="Aplicație modernă pentru gestionarea și urmărirea inspecțiilor și reviziilor de instalații de gaze naturale.">
+    <meta name="theme-color" content="#0284c7">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/icon-192.png">
+    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div class="brand-title">
+                    <h1>Revizio</h1>
+                    <span class="brand-subtitle">Gaze & Verificări</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggleBtn" class="icon-btn" title="Schimbă tema">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button id="installPwaBtn" class="icon-btn hidden" title="Instalează Aplicația">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-content">
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h2>Bună ziua, Operator</h2>
+                        <p>Iată situația operațională pentru astăzi.</p>
+                    </div>
+                    <div class="date-badge" id="currentDateDisplay"></div>
+                </div>
+
+                <!-- Statistics Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-blue">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTotalCount">0</span>
+                            <span class="stat-label">Total Lucrări</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-green">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTotalRevenue">0 RON</span>
+                            <span class="stat-label">Încasări (Fără TVA)</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-amber">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTvaAmount">0 RON</span>
+                            <span class="stat-label">Valoare TVA (19%)</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-purple">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statGrossRevenue">0 RON</span>
+                            <span class="stat-label">Total Cu TVA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Progress & Quick Actions -->
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-line"></i> Progres Zilnic Obiectiv</h3>
+                            <span id="targetPercentage" class="badge">0%</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress-bar-container">
+                                <div id="targetProgressBar" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <p class="progress-subtext" id="targetProgressText">0 din 5 lucrări finalizate astăzi.</p>
+                            <div class="target-config-row">
+                                <label for="dailyTargetInput">Obiectiv zilnic:</label>
+                                <input type="number" id="dailyTargetInput" min="1" max="50" value="5">
+                                <button id="saveTargetBtn" class="btn-sm">Salvează</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bolt"></i> Acțiuni Rapide</h3>
+                        </div>
+                        <div class="card-body quick-actions-body">
+                            <button class="action-tile" id="quickAddBtn">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <span>Adaugă Lucrare</span>
+                            </button>
+                            <button class="action-tile" id="quickExportBtn">
+                                <i class="fa-solid fa-file-arrow-down"></i>
+                                <span>Exportă Date (JSON)</span>
+                            </button>
+                            <button class="action-tile" id="quickImportBtn">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                                <span>Importă Date</span>
+                            </button>
+                            <button class="action-tile" id="quickClearBtn">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Șterge Tot</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Inspections -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Ultimele Înregistrări</h3>
+                        <button class="btn-text" id="goToInspectionsBtn">Vezi Toate</button>
+                    </div>
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="data-table" id="recentInspectionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Dată</th>
+                                        <th>Client / Adresă</th>
+                                        <th>Tip Revizie</th>
+                                        <th>Valoare (Fără TVA)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentInspectionsBody"></tbody>
+                            </table>
+                        </div>
+                        <div id="recentEmptyState" class="empty-state hidden">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>Nu există înregistrări recente.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inspections List View -->
+            <section id="view-inspections" class="view-section">
+                <div class="section-header">
+                    <h2>Gestionare Revizii & Verificări</h2>
+                    <button class="btn-primary" id="addNewInspectionBtn">
+                        <i class="fa-solid fa-plus"></i> Lucrare Nouă
+                    </button>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="filter-bar card">
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Caută după client, adresă sau număr...">
+                    </div>
+                    <div class="filter-options">
+                        <select id="filterType">
+                            <option value="">Toate tipurile</option>
+                            <option value="Revizie 2 Ani">Revizie 2 Ani</option>
+                            <option value="Verificare 10 Ani">Verificare 10 Ani</option>
+                            <option value="Instalație Nouă">Instalație Nouă</option>
+                            <option value="Remediere Defecțiuni">Remediere Defecțiuni</option>
+                        </select>
+                        <select id="filterStatus">
+                            <option value="">Toate statusurile</option>
+                            <option value="Finalizat">Finalizat</option>
+                            <option value="În Așteptare">În Așteptare</option>
+                            <option value="Programat">Programat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Inspections Table -->
+                <div class="card mt-3">
+                    <div class="card-body no-padding">
+                        <div class="table-responsive">
+                            <table class="data-table" id="fullInspectionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Dată</th>
+                                        <th>Client</th>
+                                        <th>Adresă</th>
+                                        <th>Tip</th>
+                                        <th>Preț (Fără TVA)</th>
+                                        <th>TVA (19%)</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Acțiuni</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fullInspectionsBody"></tbody>
+                            </table>
+                        </div>
+                        <div id="fullEmptyState" class="empty-state hidden">
+                            <i class="fa-solid fa-inbox"></i>
+                            <p>Nu s-au găsit înregistrări conform filtrelor selectate.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics / Calculator View -->
+            <section id="view-analytics" class="view-section">
+                <div class="section-header">
+                    <h2>Statistici & Calculator TVA</h2>
+                </div>
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-calculator"></i> Calculator Rapid preț & TVA</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="calcAmount">Sumă de bază (RON - Fără TVA):</label>
+                                <input type="number" id="calcAmount" placeholder="Ex: 350" value="350">
+                            </div>
+                            <div class="form-group">
+                                <label for="calcTvaRate">Cotă TVA (%):</label>
+                                <input type="number" id="calcTvaRate" value="19" readonly>
+                            </div>
+                            <div class="calc-results">
+                                <div class="calc-row">
+                                    <span>Valoare TVA:</span>
+                                    <strong id="calcResultTva">66.50 RON</strong>
+                                </div>
+                                <div class="calc-row total">
+                                    <span>Total cu TVA:</span>
+                                    <strong id="calcResultTotal">416.50 RON</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Sumar Financiar</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-list">
+                                <div class="summary-item">
+                                    <span>Total Net (Fără TVA):</span>
+                                    <strong id="summaryNet">0.00 RON</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Total TVA (19%):</span>
+                                    <strong id="summaryTva">0.00 RON</strong>
+                                </div>
+                                <div class="summary-item highlight">
+                                    <span>Total General (Cu TVA):</span>
+                                    <strong id="summaryGross">0.00 RON</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Lucrări înregistrate:</span>
+                                    <strong id="summaryCount">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="view-section">
+                <div class="section-header">
+                    <h2>Setări & Date Aplicație</h2>
+                </div>
+                <div class="settings-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-user-gear"></i> Preferințe Operator</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="operatorName">Nume Operator:</label>
+                                <input type="text" id="operatorName" value="Operator ORV">
+                            </div>
+                            <div class="form-group">
+                                <label for="operatorAuth">Număr Autorizație ANRE:</label>
+                                <input type="text" id="operatorAuth" placeholder="Ex: ANRE-2026-XXXX">
+                            </div>
+                            <button id="saveSettingsBtn" class="btn-primary mt-2">Salvează Setările</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-database"></i> Gestionare Date Locale</h3>
+                        </div>
+                        <div class="card-body settings-actions">
+                            <p class="text-muted">Datele sunt salvate în siguranță în stocarea locală a browserului (localStorage).</p>
+                            <div class="button-group mt-3">
+                                <button id="exportJsonBtn" class="btn-secondary"><i class="fa-solid fa-download"></i> Exportă JSON</button>
+                                <label for="importJsonFile" class="btn-secondary file-upload-label">
+                                    <i class="fa-solid fa-upload"></i> Importă JSON
+                                    <input type="file" id="importJsonFile" accept=".json" class="hidden">
+                                </label>
+                            </div>
+                            <button id="factoryResetBtn" class="btn-danger mt-3"><i class="fa-solid fa-triangle-exclamation"></i> Resetare Completă</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="view-dashboard">
+                <i class="fa-solid fa-house"></i>
+                <span>Acasă</span>
+            </button>
+            <button class="nav-item" data-target="view-inspections">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Revizii</span>
+            </button>
+            <button class="nav-item" data-target="view-analytics">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Statistici</span>
+            </button>
+            <button class="nav-item" data-target="view-settings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Setări</span>
+            </button>
+        </nav>
+
+        <!-- Modal for Add / Edit Inspection -->
+        <div id="inspectionModal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Adaugă Lucrare Nouă</h3>
+                    <button class="icon-btn close-modal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inspectionForm">
+                        <input type="hidden" id="editInspectionId">
+                        <div class="form-group">
+                            <label for="formDate">Dată Inspecție *</label>
+                            <input type="date" id="formDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formClient">Nume Client *</label>
+                            <input type="text" id="formClient" placeholder="Ex: Popescu Ion" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formAddress">Adresă Completă *</label>
+                            <input type="text" id="formAddress" placeholder="Ex: Str. Florilor Nr. 12, Sibiu" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formType">Tip Revizie / Verificare *</label>
+                            <select id="formType" required>
+                                <option value="Revizie 2 Ani">Revizie 2 Ani</option>
+                                <option value="Verificare 10 Ani">Verificare 10 Ani</option>
+                                <option value="Instalație Nouă">Instalație Nouă</option>
+                                <option value="Remediere Defecțiuni">Remediere Defecțiuni</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="formBasePrice">Preț (RON - Fără TVA) *</label>
+                            <input type="number" id="formBasePrice" step="0.01" min="0" placeholder="Ex: 300" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formStatus">Status Lucrare *</label>
+                            <select id="formStatus" required>
+                                <option value="Finalizat">Finalizat</option>
+                                <option value="În Așteptare">În Așteptare</option>
+                                <option value="Programat">Programat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="formNotes">Mențiuni / Observații</label>
+                            <textarea id="formNotes" rows="2" placeholder="Detalii tehnice, contor, etc."></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-secondary close-modal">Anulează</button>
+                            <button type="submit" class="btn-primary">Salvează Lucrarea</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toastNotification" class="toast hidden">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="toastMessage">Acțiune realizată cu succes!</span>
+        </div>
+    </div>
+
+    <script src="./assets/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error:', err));
+            });
+        }
+    </script>
+</body>
+</html>
